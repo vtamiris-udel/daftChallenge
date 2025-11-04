@@ -43,7 +43,7 @@ Scurvy was a devastating disease that affected sailors on long voyages. The cure
 ## Environment Setup
 
 First, let's install the DAFT package and set up our environment:
-
+hank
 ```{python}
 #| label: setup-environment
 #| echo: true
@@ -63,6 +63,9 @@ plt.rcParams['savefig.dpi'] = 300
 
 print("DAFT package imported successfully!")
 print("Ready to create beautiful DAGs!")
+
+import daft
+print(daft.__file__)
 ```
 
 ::: {.callout-note}
@@ -97,15 +100,45 @@ Your task is to recreate these three historical DAGs using DAFT, making them vis
 ![](https://raw.githubusercontent.com/flyaflya/persuasive/642288ea5f79050c05801c3d127084ac0f361a01/images/scurvy2.png)
 
 ```{python}
-#| label: dag-1-1747
-#| echo: true
+#| label: fig-scurvy-dag
+#| fig-cap: "Scurvy DAG drawn with daft"
+#| fig-width: 8
+#| fig-height: 4
+try:
+    import daft
+except ModuleNotFoundError as e:
+    raise ModuleNotFoundError(
+        "The 'daft' package is required. Install with `pip install daft` and re-run."
+    ) from e
 
-# TODO: Replace this placeholder with your DAFT code
-# Create a DAG showing the 1747 understanding: Lemons → Scurvy Prevention
+import matplotlib.pyplot as plt
+from daft import PGM
 
-# Your code here - recreate the DAG from the reference image
-# Use DAFT to create nodes and edges that match the visual structure
-# Customize colors and styling to make it professional
+# Create a compact, wide canvas (similar proportions to the example)
+fig = plt.figure(figsize=(3.3, 1.3), dpi=150)
+
+# Build a tiny PGM: width ~6, height ~2.5 units keeps things compact
+pgm = daft.PGM(
+    shape=[6, 3],
+    origin=[0, 0],
+    node_unit=1.4,     # controls node size
+    grid_unit=1.6      # spacing scale (helps the oval look)
+)
+
+# Nodes (keep y centered; spread x to match the reference layout)
+pgm.add_node("lemons", "Lemons", 2.0, 1.25, plot_params={"ec": "black"})
+pgm.add_node("scurvy", "Scurvy", 4.2, 1.25, plot_params={"ec": "black"})
+
+# Edge
+pgm.add_edge("lemons", "scurvy")
+
+# Render and style like the sample
+pgm.render()
+plt.title("Simplified Lind's Model (1747)", fontsize=9, pad=2)
+plt.axis("off")
+plt.tight_layout(pad=0.4)
+plt.show()
+
 ```
 
 ### DAG 2: The Misguided Belief (Wrong Understanding)
@@ -121,12 +154,69 @@ Your task is to recreate these three historical DAGs using DAFT, making them vis
 #| label: dag-2-misguided
 #| echo: true
 
-# TODO: Replace this placeholder with your DAFT code
-# Create a DAG showing the misguided belief: Acid → Bacteria Death → Scurvy Prevention
+# Styled, DAFT-ONLY version with bigger canvas, oval-like nodes, and diagonal arrows
+# (matches your styling example: aspect/scale/colors/alternate_style)
 
-# Your code here - recreate the DAG from the reference image
-# This DAG should show the incorrect causal chain
-# Use different colors or styling to indicate this is the wrong understanding
+try:
+    import daft
+except ModuleNotFoundError as e:
+    raise ModuleNotFoundError(
+        "The 'daft' package is required. Install with `pip install daft` and re-run."
+    ) from e
+
+import matplotlib.pyplot as plt
+
+# Compact figure so it fits Quarto width without horizontal scrolling
+plt.figure(figsize=(6, 3), dpi=160)
+
+pgm = daft.PGM(
+    shape=[8, 4],
+    origin=[0, 0],
+    node_unit=1.1,
+    grid_unit=1.3,
+    dpi=150,
+    alternate_style="outer"
+)
+
+# --- Styled nodes (same colors, slightly tighter spacing) ---
+pgm.add_node(
+    "acid", "Acid", 1.5, 3.2, aspect=3, scale=1.1,
+    plot_params={
+        "facecolor": "lightgreen", "edgecolor": "darkgreen",
+        "linewidth": 2, "alpha": 0.85
+    }
+)
+
+pgm.add_node(
+    "bac_in_food", "Bacteria in Food", 4.0, 2.1, aspect=3, scale=1.1,
+    plot_params={
+        "facecolor": "lightyellow", "edgecolor": "goldenrod",
+        "linewidth": 2, "alpha": 0.85
+    }
+)
+
+pgm.add_node(
+    "scurvy", "Scurvy", 6.5, 1.0, aspect=3, scale=1.1,
+    plot_params={
+        "facecolor": "honeydew", "edgecolor": "seagreen",
+        "linewidth": 2, "alpha": 0.85
+    }
+)
+
+# --- Diagonal arrows (unchanged styling) ---
+pgm.add_edge("acid", "bac_in_food", plot_params={"linewidth": 2, "alpha": 0.9})
+pgm.add_edge("bac_in_food", "scurvy", plot_params={"linewidth": 2, "alpha": 0.9})
+
+# Render
+pgm.render()
+plt.title("Updated Bacterial Theory (Late 19th Century)", fontsize=10, pad=4)
+plt.axis("off")
+plt.tight_layout(pad=0.35)
+plt.show()
+
+
+
+
 ```
 
 ### DAG 3: The 1928 Understanding (Complete and Correct)
@@ -142,12 +232,57 @@ Your task is to recreate these three historical DAGs using DAFT, making them vis
 #| label: dag-3-1928
 #| echo: true
 
-# TODO: Replace this placeholder with your DAFT code
-# Create a DAG showing the 1928 understanding: Vitamin C → Scurvy Prevention
+import daft
+import matplotlib.pyplot as plt
 
-# Your code here - recreate the DAG from the reference image
-# This should be the most complete and accurate representation
-# Use professional styling that would be suitable for a scientific publication
+# Compact version that fits within Quarto without scrolling
+plt.figure(figsize=(6, 3), dpi=160)
+
+pgm = daft.PGM(
+    shape=[8, 4],
+    origin=[0, 0],
+    node_unit=1.1,
+    grid_unit=1.3,
+    dpi=150,
+    alternate_style="outer"
+)
+
+# --- Styled nodes (same colors, slightly tighter spacing) ---
+pgm.add_node(
+    "vitamin_c", "Vitamin C", 1.5, 3.2, aspect=3, scale=1.1,
+    plot_params={
+        "facecolor": "lightgreen", "edgecolor": "darkgreen",
+        "linewidth": 2, "alpha": 0.85
+    }
+)
+
+pgm.add_node(
+    "collagen", "Collagen Synthesis", 4.0, 2.1, aspect=3, scale=1.1,
+    plot_params={
+        "facecolor": "lightyellow", "edgecolor": "goldenrod",
+        "linewidth": 2, "alpha": 0.85
+    }
+)
+
+pgm.add_node(
+    "scurvy", "Scurvy", 6.5, 1.0, aspect=3, scale=1.1,
+    plot_params={
+        "facecolor": "honeydew", "edgecolor": "seagreen",
+        "linewidth": 2, "alpha": 0.85
+    }
+)
+
+# --- Diagonal arrows (unchanged styling) ---
+pgm.add_edge("vitamin_c", "collagen", plot_params={"linewidth": 2, "alpha": 0.9})
+pgm.add_edge("collagen", "scurvy", plot_params={"linewidth": 2, "alpha": 0.9})
+
+# --- Render ---
+pgm.render()
+plt.title("Simplified Modern Understanding (1930s onwards)", fontsize=10, pad=4)
+plt.axis("off")
+plt.tight_layout(pad=0.4)
+plt.show()
+
 ```
 
 ## Student Requirements Section: Mastering DAFT Visualization {#student-analysis-section}
